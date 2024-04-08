@@ -1,0 +1,29 @@
+{
+    "name": "elias/sync-manager",
+    "description": "OOP WordPress Project with modern API",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=8.1",
+        "symfony/serializer": "6.4.x-dev"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SyncManager\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Elias Knodel",
+            "email": "elias.knodel@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.9"
+    },
+    "scripts": {
+        "check-style": "phpcs --standard=PSR12 src/",
+        "fix-style": "phpcbf --standard=PSR12 src/"
+    }
+}
