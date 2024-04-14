@@ -2,6 +2,48 @@
 
 WordPress OOP attempts and best practices.
 
+## Development
+
+1. Install Composer Dependencies
+
+```shell
+composer install
+```
+
+2. Start Local Instance
+
+```shell
+docker compose up -d
+```
+
+3. Install Composer Dependencies
+
+```shell
+docker compose exec wordpress composer install
+```
+
+4. Go to `http://localhost:8080` and install WordPress OR
+
+5. Wait until you see the installation page and then execute this command
+
+```shell
+docker compose run --rm --remove-orphans wpcli core install --url="localhost:8000" --title="Local WordPress" --admin_user="admin" --admin_password="admin" --admin_email="admin@example.com"
+```
+
+### Other Commands
+
+1. Stop Local Instance
+
+```shell
+docker compose down
+```
+
+2. If you want you can easily reset the database
+
+```shell
+docker compose down -v
+```
+
 ## Description
 
 - All the code is an example of how you would implement modern Software architecture with WordPress.

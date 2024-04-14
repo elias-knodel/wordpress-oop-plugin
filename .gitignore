@@ -1,4 +1,7 @@
 # Project files
+wordpress/
+
+# Vendor files
 node_modules/
 vendor/
 
