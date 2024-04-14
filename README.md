@@ -22,12 +22,16 @@ docker compose up -d
 docker compose exec wordpress composer install
 ```
 
-4. Go to `http://localhost:8080` and install WordPress OR
+4. Go to `http://localhost:8080` and install WordPress and change permalink settings OR
 
-5. Wait until you see the installation page and then execute this command
+5. Wait until you see the installation page and then execute these two commands
 
 ```shell
 docker compose run --rm --remove-orphans wpcli core install --url="localhost:8000" --title="Local WordPress" --admin_user="admin" --admin_password="admin" --admin_email="admin@example.com"
+```
+
+```shell
+docker compose run --rm --remove-orphans wpcli option update permalink_structure '/%postname%/'
 ```
 
 ### Other Commands
