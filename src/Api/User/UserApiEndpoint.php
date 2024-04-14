@@ -2,28 +2,17 @@
 
 namespace SyncManager\Api\User;
 
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
 use SyncManager\Interfaces\ApiEndpoint;
+use WP_Error;
+use WP_REST_Request;
 
 class UserApiEndpoint implements ApiEndpoint
 {
-    private Serializer $serializer;
-
-    public function __construct()
+    public function registerRoute(): void
     {
-        $encoders    = [ new JsonEncoder() ];
-        $normalizers = [ new ObjectNormalizer() ];
-
-        $this->serializer = new Serializer($normalizers, $encoders);
-    }
-
-    public function registerRoutes(): void
-    {
-        register_rest_route('sync-manager/v1', '/user/(?P<id>\d+)', array(
+        register_rest_route('ek-sync-manager/v1', '/user/(?P<id>\d+)', array(
             'methods'  => 'GET',
-            'callback' => array( $this, 'getUser' ),
+            'callback' => array( $this, 'callback' ),
             'args'     => array(
                 'id' => array(
                     'validate_callback' => function ($param, $request, $key) {
@@ -34,37 +23,22 @@ class UserApiEndpoint implements ApiEndpoint
         ));
     }
 
-    public function getUser(\WP_REST_Request $request): \WP_Error|array
+    public function callback(WP_REST_Request $request): WP_Error|array
     {
         $userId = $request->get_param('id');
         $user   = get_userdata($userId);
 
         if (! $user) {
-            return new \WP_Error('no_user', 'Invalid user ID', array( 'status' => 404 ));
-        }
+            error_log('User not found: ' . $userId);
 
-        // Deserialize the received data into a User object
-        $receivedUser = $this->serializer->deserialize($user, WP_User::class, 'json');
-
-        // Prepare the data for wp_insert_user
-        $userData = array(
-            'user_login' => $receivedUser->getUsername(),
-            'user_email' => $receivedUser->getEmail(),
-            'user_pass'  => null,  // When creating a user, `user_pass` is expected.
-        );
-
-        // Insert the user into the database
-        $userId = wp_insert_user($userData);
-
-        // Check for errors
-        if (is_wp_error($userId)) {
-            return new \WP_Error('cannot_create_user', 'Failed to create new user', array( 'status' => 500 ));
+            return new WP_Error('no_user', 'Invalid user ID', array( 'status' => 404 ));
         }
 
         return array(
-            'id'       => $userId,
-            'username' => $receivedUser->getUsername(),
-            'email'    => $receivedUser->getEmail(),
+            'id'    => $user->ID,
+            'name'  => $user->display_name,
+            'user_nicename'  => $user->user_nicename,
+            'email' => $user->user_email,
         );
     }
 }

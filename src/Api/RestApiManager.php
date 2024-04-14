@@ -3,12 +3,19 @@
 namespace SyncManager\Api;
 
 use SyncManager\Api\User\UserApiEndpoint;
+use SyncManager\Interfaces\Manager;
 
-class RestApiManager
+class RestApiManager implements Manager
 {
-    public function registerApiRoutes(): void
+    public UserApiEndpoint $userApiEndpoint;
+
+    public function __construct()
     {
-        $userApiEndpoint = new UserApiEndpoint();
-        $userApiEndpoint->registerRoutes();
+        $this->userApiEndpoint = new UserApiEndpoint();
+    }
+
+    public function init(): void
+    {
+        $this->userApiEndpoint->registerRoute();
     }
 }

@@ -2,11 +2,15 @@
 
 namespace SyncManager;
 
+use SyncManager\Admin\AdminPageManager;
 use SyncManager\Api\RestApiManager;
+use SyncManager\Interfaces\Manager;
 
-class SyncManager
+class SyncManager implements Manager
 {
     private RestApiManager $restApiManager;
+
+    private AdminPageManager $adminPageManager;
 
     /**
      * Construction code here
@@ -14,6 +18,7 @@ class SyncManager
     public function __construct()
     {
         $this->restApiManager = new RestApiManager();
+        $this->adminPageManager = new AdminPageManager();
     }
 
     /**
@@ -22,6 +27,7 @@ class SyncManager
     public function init(): void
     {
         // Hook into WordPress actions and filters here
-        add_action('rest_api_init', array( $this->restApiManager, 'registerApiRoutes' ));
+        add_action('rest_api_init', array( $this->restApiManager, 'init' ));
+        add_action('init', array( $this->adminPageManager, 'init' ));
     }
 }
