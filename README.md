@@ -1,3 +1,7 @@
+> [!CAUTION]
+> There are too many components I would need to write from scratch. Hence, in my second approach,  
+> I used the Symfony Components, which are by default standalone and usable: [elias-knodel/wordpress-x-symfony](https://github.com/elias-knodel/wordpress-x-symfony)
+
 # wordpress-oop-plugin
 
 WordPress OOP attempts and best practices.
